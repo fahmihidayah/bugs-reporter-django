@@ -1,0 +1,21 @@
+{% extends 'adminlte/lib/_main_sidebar.html' %}
+
+{% block nav_links %}
+<li>
+    <a href="#">
+        <i class="fa fa-users"></i> <span>User</span>
+    </a>
+</li>
+<li>
+    <a href="{% url 'project_app_project_list' %}">
+        <i class="fa fa-users"></i> <span>Aplikasi</span>
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fa fa-users"></i> <span>Settings</span>
+    </a>
+</li>
+
+
+{% endblock nav_links %}

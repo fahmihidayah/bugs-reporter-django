@@ -1,0 +1,84 @@
+{% extends "admin/base_panel.html" %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+{% load django_tables2 %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    {{ object.name }}
+                </h3>
+            </div>
+            <div class="box-body">
+                {{object.is_editable}}
+                <table class="table">
+                    <tr>
+                        <td>name</td>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>slug</td>
+                        <td>{{ object.slug }}</td>
+                    </tr>
+                    <tr>
+                        <td>created</td>
+                        <td>{{ object.created }}</td>
+                    </tr>
+                    <tr>
+                        <td>last_updated</td>
+                        <td>{{ object.last_updated }}</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                </table>
+                {% if object.count_users > 0 %}
+                    <a class="btn btn-primary" href="{{object.get_update_url}}">Edit Project</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% if object.count_users > 0 %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Add User
+                </h3>
+            </div>
+            <div class="box-body">
+
+                <form method="post" action="{% url 'project_app_add_user_to_project' object.slug%}">
+                    {% csrf_token %}
+
+                    {% crispy add_user_form %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif%}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Users in {{ object.name }}
+                </h3>
+            </div>
+            <div class="box-body">
+                {% render_table table %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
