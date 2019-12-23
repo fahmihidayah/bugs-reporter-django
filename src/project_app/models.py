@@ -111,8 +111,8 @@ class ProjectRepository(object):
         # return Project.objects.filter(models.Q(users=user)).filter(models.Q(users__user_project_user__status="1"))
         return Project\
             .objects\
-            .filter(models.Q(users__id=user.id) & models.Q(users__user_project_user__status=TYPE_USER_OWNER))\
-            .distinct()
+            .filter(models.Q(users__id=user.id) & models.Q(user_project_project__status=TYPE_USER_OWNER))\
+
 
     def find_user_project_by_project(self, project):
         return UserProject.objects.filter(project=project)
