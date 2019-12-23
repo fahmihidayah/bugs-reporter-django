@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     "accounts",
     'rest_framework',
     'project_app',
+    'issue_app',
 )
 
 MIDDLEWARE = [

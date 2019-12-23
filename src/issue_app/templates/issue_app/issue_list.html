@@ -1,0 +1,32 @@
+{% extends "admin/base_panel.html" %}
+{% load static %}
+{% block box_content %}
+<p><a class="btn btn-default" href="{% url 'issue_app_issue_list' %}">Issue Listing</a></p>
+<table class="table">
+<tr>
+<td>ID</td><td>Link</td>
+    <td>name</td>
+    <td>slug</td>
+    <td>created</td>
+    <td>last_updated</td>
+    <td>description</td>
+    <td>type</td>
+    <td>priority</td>
+    <td>status</td>
+</tr>
+{% for object in object_list %}
+<tr>
+    <td>{{object.pk}}</td>
+    <td><a href="{{object.get_absolute_url}}">{{object}}</a></td>
+    <td>{{ object.name }}</td>
+    <td>{{ object.slug }}</td>
+    <td>{{ object.created }}</td>
+    <td>{{ object.last_updated }}</td>
+    <td>{{ object.description }}</td>
+    <td>{{ object.type }}</td>
+    <td>{{ object.priority }}</td>
+    <td>{{ object.status }}</td>
+</tr>
+{% endfor %}
+</table><a class="btn btn-primary" href="{% url 'issue_app_issue_create' %}">Create new Issue</a>
+{% endblock %}
