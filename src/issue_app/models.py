@@ -19,6 +19,10 @@ from project_app import models as project_models
 
 User = get_user_model()
 
+TYPE_TEXT = {0 : "BUGS", 1 : "OTHER"}
+STATUS_TEXT = {0 : "OPEN", 1 : "CLOSED"}
+PRIORITY_TEXT = {0 : "MAJOR", 1 : "MINOR"}
+
 
 class Issue(models.Model):
 
@@ -42,7 +46,16 @@ class Issue(models.Model):
         default=None
     )
 
-    application = models.ForeignKey(project_models.Project, related_name='project_issues', on_delete=models.CASCADE, default=None)
+    project = models.ForeignKey(project_models.Project, related_name='project_issues', on_delete=models.CASCADE, default=None)
+
+    def type_text(self):
+        return TYPE_TEXT.get(self.type)
+
+    def priority_text(self):
+        return PRIORITY_TEXT[self.priority]
+
+    def status_text(self):
+        return STATUS_TEXT[self.status]
 
 
     class Meta:
@@ -57,5 +70,20 @@ class Issue(models.Model):
 
     def get_update_url(self):
         return reverse('issue_app_issue_update', args=(self.slug,))
+
+
+class IssueRepository(object):
+
+    project_repository = project_models.ProjectRepository()
+
+    def find_by_user(self, user: User):
+        return Issue.objects.filter(models.Q(target_user=user))
+
+
+    def create_issue(self, issue : Issue, project_id, creator : User):
+        issue.project = self.project_repository.find_by_id(project_id)
+        issue.creator_issue = creator
+        issue.save()
+        return issue
 
 

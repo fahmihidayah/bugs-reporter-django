@@ -3,9 +3,6 @@
 {% load django_tables2 %}
 {% block box_title %} Project Listing {% endblock %}
 {% block box_content %}
-<p><a class="btn btn-default" href="{% url 'project_app_project_list' %}">Project Listing</a></p>
-
-
     {% render_table table %}
 
     {% include 'modal/confirmation_modal.html' %}

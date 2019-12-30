@@ -10,6 +10,8 @@ class ProjectTable(Table):
 
     edit = TemplateColumn(template_name='table/edit.html')
 
+    create_issue = TemplateColumn(template_name='project_app/table/create_issue.html')
+
     class Meta:
         model = models.Project
         fields = ['id', 'name', 'created', 'last_updated']

@@ -1,8 +1,8 @@
 {% extends "admin/base_panel.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% block box_title%} Issue {% endblock %}
 {% block box_content %}
-<p><a class="btn btn-default" href="{% url 'issue_app_issue_list' %}">Issue Listing</a></p>
 <form method="post">
 {% csrf_token %}
 {{form|crispy}}

@@ -64,6 +64,9 @@ class Project(models.Model):
     def get_delete_url(self):
         return reverse('project_app_project_delete', args=(self.slug,))
 
+    def get_create_issue_url(self):
+        return reverse('issue_app_issue_create_from_project', args=(self.pk, ))
+
 
 class UserProjectRepository(object):
 
@@ -95,8 +98,14 @@ class UserProjectRepository(object):
 
 class ProjectRepository(object):
 
+    def find_by_id(self, pk) -> Project:
+        return Project.objects.filter(models.Q(id=pk)).first()
+
     def find_by_pk(self, pk, user) -> Project:
         return Project.objects.filter(models.Q(slug=pk)).first()
+
+    def find_by_slug(self, slug) -> Project:
+        return Project.objects.filter(models.Q(slug=slug))
 
     def find_by_slug_and_count_user_status_owner(self, slug, user):
         return Project.objects \
