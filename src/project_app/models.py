@@ -126,6 +126,9 @@ class ProjectRepository(object):
     def find_user_project_by_project(self, project):
         return UserProject.objects.filter(project=project)
 
+    def find_user_by_project_id(self, project_id):
+        return User.objects.filter(models.Q(user_project__id=project_id))
+
     def find_user_by_project(self, project):
         return User.objects.filter(models.Q(user_project=project))
         #.filter(models.Q(users__user_project_user__status="1"))

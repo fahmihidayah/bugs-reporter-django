@@ -86,4 +86,5 @@ class IssueRepository(object):
         issue.save()
         return issue
 
-
+def find_user(project_id):
+    return project_models.ProjectRepository().find_user_by_project_id(project_id)

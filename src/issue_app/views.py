@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView
-from .models import Issue, IssueRepository
+from .models import Issue, IssueRepository, find_user
 from .forms import IssueForm, IssueNoProjectForm,AllIssueForm
 from .tables import IssueTable
 from django.http import HttpResponseRedirect
@@ -25,6 +25,14 @@ class IssueCreateFromProjectView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("project_app_project_list")
     issue_repository = IssueRepository()
 
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        form : IssueNoProjectForm = form_class(**self.get_form_kwargs())
+        form.populate_choice(find_user(self.kwargs['pk']))
+        return form
+
+
     def form_valid(self, form : IssueNoProjectForm):
         self.issue_repository.create_issue(form.save(commit=False), self.kwargs['pk'], self.request.user)
         return HttpResponseRedirect(self.success_url)
@@ -33,9 +41,6 @@ class IssueCreateFromProjectView(LoginRequiredMixin, CreateView):
 class IssueCreateView(CreateView):
     model = Issue
     form_class = IssueForm
-
-
-
 
 
 class IssueDetailView(DetailView):
