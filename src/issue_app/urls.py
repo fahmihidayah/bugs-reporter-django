@@ -16,6 +16,8 @@ urlpatterns = (
 urlpatterns += (
     # urls for Issue
     path('issue/', views.IssueListView.as_view(), name='issue_app_issue_list'),
+    path('issue_owner/', views.IssueCreatorListView.as_view(), name='issue_app_issue_owner_list'),
+
     path('issue/create/', views.IssueCreateView.as_view(), name='issue_app_issue_create'),
     path('issue/create/<int:pk>', views.IssueCreateFromProjectView.as_view(), name='issue_app_issue_create_from_project'),
     path('issue/detail/<slug:slug>/', views.IssueDetailView.as_view(), name='issue_app_issue_detail'),

@@ -1,17 +1,83 @@
-{% extends "admin/base_panel.html" %}
+{% extends "admin/base.html" %}
 {% load static %}
-{% block box_content %}
-<p><a class="btn btn-default" href="{% url 'issue_app_issue_list' %}">Issue Listing</a></p>
-<table class="table">
-<tr><td>name</td><td>{{ object.name }}</td></tr>
-<tr><td>slug</td><td>{{ object.slug }}</td></tr>
-<tr><td>created</td><td>{{ object.created }}</td></tr>
-<tr><td>last_updated</td><td>{{ object.last_updated }}</td></tr>
-<tr><td>description</td><td>{{ object.description }}</td></tr>
-<tr><td>type</td><td>{{ object.type }}</td></tr>
-<tr><td>priority</td><td>{{ object.priority }}</td></tr>
-<tr><td>status</td><td>{{ object.status }}</td></tr>
-</table>
-<a class="btn btn-primary" href="{{object.get_update_url}}">Edit Issue</a>
+{% block content %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+<div class="row">
+    <div class="col-md-9">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    {{ object.name }}
+                </h3>
+            </div>
+            <div class="box-body">
+                <table class="table">
+                    <tr>
+                        <td>name</td>
+                        <td>{{ object.name }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>created</td>
+                        <td>{{ object.created }}</td>
+                    </tr>
+                    <tr>
+                        <td>last_updated</td>
+                        <td>{{ object.last_updated }}</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>{{ object.type }}</td>
+                    </tr>
+                    <tr>
+                        <td>priority</td>
+                        <td>{{ object.priority }}</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td>{{ object.status }}</td>
+                    </tr>
+                </table>
+                <a href="#" role="button" class="btn btn-primary">Set Done</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Add Comments
+                </h3>
+            </div>
+
+
+            <div class="box-body">
+                <form  method="post" action="{% url 'comment_app_comment_create_with_issue_app' object.pk %}">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Comments</h3>
+            </div>
+            <div class="box-body">
+                {% render_table table %}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

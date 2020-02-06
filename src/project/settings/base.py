@@ -83,6 +83,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'project_app',
     'issue_app',
+    'comment_app',
 )
 
 MIDDLEWARE = [

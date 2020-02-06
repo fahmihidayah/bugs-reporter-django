@@ -6,6 +6,7 @@ import profiles.urls
 import accounts.urls
 import project_app.urls
 import issue_app.urls
+import comment_app.urls
 from . import views
 
 # Personalized admin site settings like title and header
@@ -20,6 +21,7 @@ urlpatterns = [
     path("", include(accounts.urls)),
     path("", include(project_app.urls)),
     path("", include(issue_app.urls)),
+    path("", include(comment_app.urls)),
 ]
 
 # User-uploaded files like profile pics need to be served in development

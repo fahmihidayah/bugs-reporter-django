@@ -79,6 +79,17 @@ class IssueRepository(object):
     def find_by_user(self, user: User):
         return Issue.objects.filter(models.Q(target_user=user))
 
+    def find_by_target_user(self, user: User):
+        return Issue.objects.filter(models.Q(target_user=user))
+
+    def find_by_creator_user(self, user: User):
+        return Issue.objects.filter(models.Q(creator_issue=user))
+
+    def find_by_slug(self, slug):
+        return Issue.objects.filter(models.Q(slug=slug)).first()
+
+    def find_by_id(self, id):
+        return Issue.objects.filter(models.Q(pk=id)).first()
 
     def create_issue(self, issue : Issue, project_id, creator : User):
         issue.project = self.project_repository.find_by_id(project_id)
