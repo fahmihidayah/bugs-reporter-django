@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from issue_app.models import IssueRepository
+from issue_app.models import IssueRepository, Issue
 
 from django.http import HttpResponseRedirect
 
@@ -23,9 +23,10 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form : CommentForm):
         data : Comment = form.save(commit=False)
         data.user = self.request.user
-        data.issue = self.issue_repository.find_by_id(self.kwargs['pk'])
+        issue : Issue = self.issue_repository.find_by_id(self.kwargs['pk'])
+        data.issue = issue
         data.save()
-        return HttpResponseRedirect(self.success_url)
+        return HttpResponseRedirect(issue.get_absolute_url())
 
 
 

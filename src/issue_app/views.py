@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView, UpdateView, CreateView
+from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, View
 from .models import Issue, IssueRepository, find_user
 from .forms import IssueForm, IssueNoProjectForm,AllIssueForm, CommentForm
 from .tables import IssueTable, IssueViewOnlyTable
@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django_tables2 import SingleTableView
+from project_app import models as project_models
 from comment_app import models as comment_models
 from comment_app import tables as comment_tables
 from comment_app import forms as comment_forms
@@ -19,6 +20,12 @@ class IssueListView(LoginRequiredMixin, SingleTableView):
     table_class = IssueViewOnlyTable
     paginate_by = 10
     repository = IssueRepository()
+    project_repository: project_models.ProjectRepository = project_models.ProjectRepository()
+
+    def get_context_data(self, **kwargs):
+        context = super(IssueListView, self).get_context_data(**kwargs)
+        context['list_projects'] = self.project_repository.find_by_own_user(self.request.user)
+        return context
 
     def get_queryset(self):
         return self.repository.find_by_target_user(self.request.user)
@@ -78,3 +85,8 @@ class IssueUpdateView(LoginRequiredMixin, UpdateView):
     model = Issue
     form_class = IssueForm
 
+
+class IssueUpdateDoneView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect('')

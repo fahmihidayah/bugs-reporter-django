@@ -67,7 +67,6 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('issue_app_issue_detail', args=(self.slug,))
 
-
     def get_update_url(self):
         return reverse('issue_app_issue_update', args=(self.slug,))
 
