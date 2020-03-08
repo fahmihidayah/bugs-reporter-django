@@ -7,3 +7,7 @@ class HomePage(generic.TemplateView):
 
 class AboutPage(generic.TemplateView):
     template_name = "about.html"
+
+
+class TestLoginPage(generic.TemplateView):
+    template_name = "front_end/login.html"

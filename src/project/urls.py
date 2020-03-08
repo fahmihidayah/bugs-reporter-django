@@ -22,6 +22,8 @@ urlpatterns = [
     path("", include(project_app.urls)),
     path("", include(issue_app.urls)),
     path("", include(comment_app.urls)),
+
+    path("test_login", views.TestLoginPage.as_view(), name="test_login"),
 ]
 
 # User-uploaded files like profile pics need to be served in development
