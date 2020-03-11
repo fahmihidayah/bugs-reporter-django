@@ -70,11 +70,11 @@ class Project(models.Model):
 
 class UserProjectRepository(object):
 
-    def create_with_email(self, email, project_slug, type):
+    def create_with_email(self, email, project_slug):
         user = User.objects.filter(models.Q(email=email)).first()
         if user:
             project: Project = Project.objects.get(slug=project_slug)
-            return self.create(user, project, type)
+            return self.create(user, project)
         else:
             return None
 
@@ -82,14 +82,13 @@ class UserProjectRepository(object):
     def find_by_project_user(self, project, user):
         return UserProject.objects.filter(models.Q(project=project) & models.Q(user=user))
 
-    def create(self, user, project, type):
+    def create(self, user, project):
         query_contain = self.find_by_project_user(project, user)
         print("contain {}".format(query_contain.count()))
         if query_contain.count() == 0:
-            return UserProject.objects.create(user=user, project=project, status=type)
+            return UserProject.objects.create(user=user, project=project)
         else:
             user_project = query_contain.first()
-            user_project.status = type
             user_project.save()
             return user_project
 

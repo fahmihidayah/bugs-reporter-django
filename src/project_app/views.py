@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, DeleteView, TemplateView
 
-from .models import Project, UserProject, ProjectRepository, User, UserProjectRepository
+from .models import Project, UserProject, ProjectRepository, User, UserProjectRepository, TYPE_USER_OWNER
 from .forms import ProjectForm, AddUserForm
 from .tables import ProjectTable, UserTable
 from django.http import HttpResponseRedirect
