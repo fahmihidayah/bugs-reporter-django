@@ -52,7 +52,9 @@ class CommentForm(forms.Form):
 
 class FilterIssue(forms.Form):
     projects = forms.ModelChoiceField(queryset=project_models.ProjectRepository().find_all(), required=False)
+    status = forms.ChoiceField(label="Status", choices=((0, "Open"), (1, "Closed"), (2, "All")))
     keyword = forms.CharField(label='Keyword', required=False)
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

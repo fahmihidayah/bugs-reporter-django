@@ -1,4 +1,9 @@
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-name="{{ record.title }}" data-id="{{ record.pk }}"  data-target="#confirmation-modal">Done</button>
-<form action="{{ record.get_delete_url }}" id="form-delete-{{record.pk}}" method="post" data-id="{{ record.pk }}"  >
-    {% csrf_token %}
+<form method="post" action="{% url 'issue_app_issue_change_status' record.slug %}">
+                        {% csrf_token %}
+                        <input hidden name="is_from_list" value="1">
+                        {% if record.status == 0 %}
+                            <button type="submit" class="btn btn-primary btn-sm">Set Done</button>
+                        {% elif record.status == 1 %}
+                            <button type="submit" class="btn btn-danger btn-sm">Set Open</button>
+                        {% endif %}
 </form>

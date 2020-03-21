@@ -33,6 +33,7 @@ class IssueListView(LoginRequiredMixin, SingleTableView):
         form.is_valid()
         keys = form.cleaned_data
         keys['user'] = self.request.user
+        print(keys)
         return self.repository.find_by_target_user(keys)
 
 
@@ -95,7 +96,12 @@ class IssueUpdateDoneView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         issue : Issue = IssueRepository().find_by_slug(self.kwargs['slug'])
-
         issue.set_done()
+        if 'is_from_list' in self.request.POST:
+            return redirect('issue_app_issue_list')
+        else:
+            return HttpResponseRedirect(issue.get_absolute_url())
 
-        return HttpResponseRedirect(issue.get_absolute_url())
+
+
+
