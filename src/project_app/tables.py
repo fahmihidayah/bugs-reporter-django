@@ -4,6 +4,7 @@ from . import models
 
 class ProjectTable(Table):
 
+
     delete = TemplateColumn(template_name='table/delete.html')
 
     detail = TemplateColumn(template_name='table/detail.html')

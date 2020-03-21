@@ -78,8 +78,14 @@ class IssueRepository(object):
     def find_by_user(self, user: User):
         return Issue.objects.filter(models.Q(target_user=user))
 
-    def find_by_target_user(self, user: User):
-        return Issue.objects.filter(models.Q(target_user=user))
+    def find_by_target_user(self, filter):
+        return Issue.objects.filter(models.Q(target_user=filter['user']))
+        # if 'projects' not in filter:
+        #     return Issue.objects.filter(models.Q(target_user=filter['user']))
+        # else:
+        #     return Issue.objects.filter(models.Q(target_user=filter['user'])
+        #                             & models.Q(project__id=filter['projects'])
+        #                             & models.Q(name__icontains=filter['keyword']))
 
     def find_by_creator_user(self, user: User):
         return Issue.objects.filter(models.Q(creator_issue=user))

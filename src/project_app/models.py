@@ -47,6 +47,9 @@ class Project(models.Model):
         User, through=UserProject, related_name='user_project'
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         ordering = ('-created',)
 
@@ -70,11 +73,11 @@ class Project(models.Model):
 
 class UserProjectRepository(object):
 
-    def create_with_email(self, email, project_slug):
+    def create_with_email(self, email, project_slug, user_type):
         user = User.objects.filter(models.Q(email=email)).first()
         if user:
             project: Project = Project.objects.get(slug=project_slug)
-            return self.create(user, project)
+            return self.create(user, project, user_type)
         else:
             return None
 
@@ -82,11 +85,11 @@ class UserProjectRepository(object):
     def find_by_project_user(self, project, user):
         return UserProject.objects.filter(models.Q(project=project) & models.Q(user=user))
 
-    def create(self, user, project):
+    def create(self, user, project, user_type):
         query_contain = self.find_by_project_user(project, user)
         print("contain {}".format(query_contain.count()))
         if query_contain.count() == 0:
-            return UserProject.objects.create(user=user, project=project)
+            return UserProject.objects.create(user=user, project=project, status=user_type)
         else:
             user_project = query_contain.first()
             user_project.save()
@@ -120,6 +123,10 @@ class ProjectRepository(object):
         return Project\
             .objects\
             .filter(models.Q(users__id=user.id) & models.Q(user_project_project__status=TYPE_USER_OWNER))\
+
+
+    def find_all(self):
+        return Project.objects.all()
 
 
     def find_user_project_by_project(self, project):

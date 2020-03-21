@@ -1,6 +1,9 @@
 from django import forms
 from .models import Issue, User, find_user
 
+
+from project_app import models as project_models
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML, Field
 from authtools import forms as authtoolsforms
@@ -43,6 +46,18 @@ class IssueEditForm(forms.ModelForm):
         model = Issue
         fields = []
 
-
 class CommentForm(forms.Form):
     comment = forms.CharField(label='Comment')
+
+
+class FilterIssue(forms.Form):
+    projects = forms.ModelChoiceField(queryset=project_models.ProjectRepository().find_all(), required=False)
+    keyword = forms.CharField(label='Keyword', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'user' in self.initial:
+            self.fields['projects'].queryset = project_models.ProjectRepository().find_by_own_user(self.initial['user'])
+
+        self.fields['keyword'].required = False
+        self.helper = FormHelper()

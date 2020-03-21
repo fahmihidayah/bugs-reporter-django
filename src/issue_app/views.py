@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, View
 from .models import Issue, IssueRepository, find_user
-from .forms import IssueForm, IssueNoProjectForm,AllIssueForm, CommentForm
+from .forms import IssueForm, IssueNoProjectForm,AllIssueForm, CommentForm, FilterIssue
 from .tables import IssueTable, IssueViewOnlyTable
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -24,11 +24,16 @@ class IssueListView(LoginRequiredMixin, SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(IssueListView, self).get_context_data(**kwargs)
+        context['form'] = FilterIssue(initial={'user':self.request.user})
         context['list_projects'] = self.project_repository.find_by_own_user(self.request.user)
         return context
 
     def get_queryset(self):
-        return self.repository.find_by_target_user(self.request.user)
+        form : FilterIssue = FilterIssue(data=self.request.GET)
+        form.is_valid()
+        keys = form.cleaned_data
+        keys['user'] = self.request.user
+        return self.repository.find_by_target_user(keys)
 
 
 class IssueCreatorListView(LoginRequiredMixin, SingleTableView):
