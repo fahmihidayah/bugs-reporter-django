@@ -70,6 +70,10 @@ class Issue(models.Model):
     def get_update_url(self):
         return reverse('issue_app_issue_update', args=(self.slug,))
 
+    def set_done(self):
+        self.status = 1 if self.status == 0 else 0
+        self.save()
+
 
 class IssueRepository(object):
 

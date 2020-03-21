@@ -94,4 +94,8 @@ class IssueUpdateView(LoginRequiredMixin, UpdateView):
 class IssueUpdateDoneView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseRedirect('')
+        issue : Issue = IssueRepository().find_by_slug(self.kwargs['slug'])
+
+        issue.set_done()
+
+        return HttpResponseRedirect(issue.get_absolute_url())

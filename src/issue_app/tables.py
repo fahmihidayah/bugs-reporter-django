@@ -23,5 +23,5 @@ class IssueViewOnlyTable(Table):
     class Meta:
         model = models.Issue
 
-        fields = ['id', 'project.name', 'name', 'type_text', 'priority_text', 'status_text', 'creator_issue.name', 'created', 'last_updated', ]
+        fields = ['id', 'name', 'priority_text', 'status_text', 'creator_issue.name',]
         template_name = 'django_tables2/bootstrap.html'
