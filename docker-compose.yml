@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-bug-reporter
+    expose:
+      - 8001
+    ports:
+      - 8001:80
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+    depends_on:
+      - web
+
+  web:
+    image: fahmihidayahcs/python-uwsgi
+    restart: always
+    volumes:
+      - /Users/fahmi/Documents/Pycharm/bug-reporter-django/project/:/usr/src/
+    container_name: django-bug-reporter
+    command: bash -c "pip3 install pyfcm && pip3 install django-redis && python usr/src/src/manage.py migrate && uwsgi --ini /usr/src/uwsgi.ini"
+    ports:
+      - 8000:8000
+#    depends_on:
+#      - db
+#      - redis
+#
+#  db:
+#    image: bitnami/postgresql
+#    container_name: postgresql-django-push
+#    environment:
+#      - POSTGRESQL_USERNAME=root
+#      - POSTGRESQL_PASSWORD=root
+#      - POSTGRESQL_DATABASE=django_push
+#    volumes:
+#      - /Users/fahmi/Documents/Pycharm/psgl_push/:/bitnami/postgresql
+#    ports:
+#      - 5432:5432
+#
+#  redis:
+#    image: bitnami/redis
+#    container_name: redis-django-push
+#    environment:
+#      - ALLOW_EMPTY_PASSWORD=yes
+#    ports:
+#      - 6379:6379
+

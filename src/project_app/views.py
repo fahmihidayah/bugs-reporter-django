@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django_tables2 import SingleTableView
+from guardian.mixins import PermissionRequiredMixin
 
 
 class ProjectListView(LoginRequiredMixin, SingleTableView):
@@ -33,7 +34,8 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class ProjectDetailView(LoginRequiredMixin, SingleTableView):
+class ProjectDetailView(PermissionRequiredMixin, LoginRequiredMixin, SingleTableView):
+    permission_required = "project_app.view_project"
     model = UserProject
     paginate_by = 10
     table_class = UserTable
@@ -41,10 +43,13 @@ class ProjectDetailView(LoginRequiredMixin, SingleTableView):
     user_project_repository = UserProjectRepository()
     template_name = "project_app/project_detail.html"
 
+    def get_permission_object(self):
+        self.extra_context = {'object': self.repository.find_by_slug_and_count_user_status_owner(self.kwargs['slug'], user=self.request.user)}
+        return self.extra_context['object']
+
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
-        context['object'] = self.repository.find_by_slug_and_count_user_status_owner(self.kwargs['slug'], user=self.request.user)
-
+        context['object'] = self.extra_context['object']
         context['add_user_form'] = AddUserForm()
         return context
 

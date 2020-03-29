@@ -72,7 +72,7 @@ class IssueCreateView(LoginRequiredMixin, CreateView):
 
 class IssueDetailView(LoginRequiredMixin, SingleTableView):
     model = comment_models.Comment
-    comment_repository: comment_models.CommentRepository= comment_models.CommentRepository()
+    comment_repository: comment_models.CommentRepository = comment_models.CommentRepository()
     issue_repository: IssueRepository= IssueRepository()
     table_class = comment_tables.CommentTable
     paginate_by = 10

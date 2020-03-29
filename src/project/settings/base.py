@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'project_app',
     'issue_app',
     'comment_app',
+    "guardian",
 )
 
 MIDDLEWARE = [
@@ -95,6 +96,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 ROOT_URLCONF = "project.urls"
 

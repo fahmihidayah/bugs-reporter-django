@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import models as auth_models
 from django.db import models as models
 from django_extensions.db import fields as extension_fields
+from guardian.shortcuts import assign_perm
 
 from django.conf import settings
 
@@ -51,6 +52,9 @@ class Project(models.Model):
         return self.name
 
     class Meta:
+        permissions = (
+            ('view_project', 'View Project'),
+        )
         ordering = ('-created',)
 
     def __unicode__(self):
@@ -85,14 +89,21 @@ class UserProjectRepository(object):
     def find_by_project_user(self, project, user):
         return UserProject.objects.filter(models.Q(project=project) & models.Q(user=user))
 
-    def create(self, user, project, user_type):
+    def create(self, user, project, user_type = TYPE_USER_OWNER):
         query_contain = self.find_by_project_user(project, user)
         print("contain {}".format(query_contain.count()))
         if query_contain.count() == 0:
-            return UserProject.objects.create(user=user, project=project, status=user_type)
+            user_project = UserProject.objects.create(user=user, project=project, status=user_type)
+            assign_perm('view_project', user, project)
+            assign_perm('delete_project', user, project)
+            assign_perm('change_project', user, project)
+            return user_project
         else:
             user_project = query_contain.first()
             user_project.save()
+            assign_perm('view_project', user, project)
+            assign_perm('delete_project', user, project)
+            assign_perm('change_project', user, project)
             return user_project
 
     def find_by_project_slug(self, slug):
