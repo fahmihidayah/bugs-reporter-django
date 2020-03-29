@@ -57,13 +57,15 @@ class ProjectDetailView(PermissionRequiredMixin, LoginRequiredMixin, SingleTable
         return self.user_project_repository.find_by_project_slug(self.kwargs['slug'])
 
 
-class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = "project_app.change_project"
     model = Project
     form_class = ProjectForm
     success_url = reverse_lazy("project_app_project_list")
 
 
-class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+class ProjectDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+    permission_required = "project_app.delete_project"
     model = Project
     success_url = reverse_lazy("project_app_project_list")
 
@@ -72,7 +74,8 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         return super(ProjectDeleteView, self).get_success_url()
 
 
-class AddUserToProjectView(LoginRequiredMixin, TemplateView):
+class AddUserToProjectView(PermissionRequiredMixin, LoginRequiredMixin, TemplateView):
+    permission_required = "project_app.change_project"
     http_method_names = ['post']
     user_project_repository = UserProjectRepository()
 
